@@ -1,3 +1,5 @@
+from pathlib import Path
+
 inventory = 0
 processCount = 0
 failedCount = 0
@@ -6,6 +8,14 @@ orders = []
 fileName = "orders.txt"
 
 def read_file(orders):
+
+    if Path(fileName).exists() == False:
+        with open(fileName,'+w') as file:
+            file.write("1001,Wireless Mouse,2\n")
+            file.write("1002,Keyboard,1\n")
+            file.write("1003,USB Cable,3")
+        file.close()
+
     with open(fileName,'+r') as file:
         for line in file:
             orders.append(line.strip())
@@ -23,6 +33,7 @@ def read_input(orders):
         print(f"{item[0]}, {item[1]}, {item[2]}")
 
 def get_valid_product_name():
+    
     productName = input("Enter the product name: ")
     if productName.lower() == 'quit':
         return None
