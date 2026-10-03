@@ -9,24 +9,31 @@ tax = 0.0
 orders = []
 fileName = "inventory.json"
 
+def dump_file(orders):
+    with open(fileName,'w') as file:
+        json.dump(orders, file)
+    file.close()
+    
+
+
 def read_file(orders):
     if Path(fileName).exists() == False:
         print(f"File {fileName} does not exist. Creating a new file...")
         with open(fileName,'+w') as file:
             items = [{
-                "ID":1001,
+                "ID":"P001",
                 "Name":"Laptop",
                 "Price":1200.0,
                 "Stock":40
             },
             {
-                "ID":1002,
+                "ID":"P002",
                 "Name":"Mouse",
                 "Price":25.50,
                 "Stock":40
             },
             {
-                "ID":1003,
+                "ID":"P003",
                 "Name":"Keyboard",
                 "Price":45.0,
                 "Stock":25
@@ -44,6 +51,16 @@ def read_file(orders):
     file.close()
     return orders
 
+def display_orders(orders):
+    #orders = read_file(orders)
+    print("Current Inventory:")
+    print("------------------------------------------------")
+    for i in orders:
+        print(f"ID:{i['ID']}| Name:{i['Name']}| Price:${i['Price']:.2f}| Stock:{i['Stock']}")
+    print("------------------------------------------------\n")
+    return orders
+
+
 def add_product(orders):
     print("Add Product")
     productID = input("Enter the product ID: ")
@@ -58,27 +75,44 @@ def add_product(orders):
         "Stock": productStock
     }
     orders.append(product)
-    print(f"Updated Inventory:\n{orders}")
     print("\nProduct added successfully.\n")
 
-    with open(fileName,'w') as file:
-        json.dump(orders, file)
-    file.close()
+    #Only be saved when option 4 mode
+    #dump_file(orders)
     return orders
 
 
-def save_output(output):
-    with open(fileName,'+a') as file:
-        file.write(str(output))
-    file.close()
+def update_stock(orders):
+    itemID = input("Enter Product ID: ")
 
-def display_orders(orders):
-    print(orders)
-    print("Current Inventory:")
-    print("------------------------------------------------")
     for i in orders:
-        print(f"ID:{i['ID']}| Name:{i['Name']}| Price:${i['Price']:.2f}| Stock:{i['Stock']}")
-    print("------------------------------------------------\n")
+        if i['ID'] == itemID:
+            print(f"Product Found:\nName: {i['Name']}\nCurrent Stock: {i['Stock']}")
+            newStock = int(input("Enter new stock quantity: "))
+            i['Stock'] = newStock
+            #Only be saved when option 5 mode
+            #dump_file(orders)
+            print("Stock updated successfully!")
+            return orders
+
+
+    print("Item not found in inventory!")
+    return orders
+
+def search_product(orders):
+    itemID = input("Enter Product ID: ")
+
+    for i in orders:
+        if i['ID'] == itemID:
+            print("------------------------------------------------")
+            print(f"ID: {i['ID']}\nName: {i['Name']}\nPrice: ${i['Price']:.2f}\nStock: {i['Stock']}")
+            print("------------------------------------------------")
+            return orders
+
+    print("Item not found in inventory!")
+    return orders
+
+
 
 
 
@@ -100,7 +134,6 @@ def initialize(orders):
 
 
 while True:
-    orders = []
     if init == False:
         orders = initialize(orders)
         init = True
@@ -113,11 +146,17 @@ while True:
     elif menuOption == '2':
         orders = add_product(orders)
     elif menuOption == '3':
-        pass
+        orders = update_stock(orders)
     elif menuOption == '4':
-        pass
+        orders = search_product(orders)
     elif menuOption == '5':
-        pass
+        print("Saving inventory...")
+        dump_file(orders)
+        print(f"Inventory saved successfully to {fileName}.\n")
     elif menuOption == '6':
-        pass
-    
+        print("Saving inventory before exit...")
+        dump_file(orders)
+        print("Inventory saved successfully.\n")
+        print("Thank you for using Inventory Management System.")
+        print("Program terminated.")
+        break
