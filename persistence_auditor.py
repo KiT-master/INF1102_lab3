@@ -1,86 +1,123 @@
 from pathlib import Path
+import json
 
+init = False
 inventory = 0
 processCount = 0
 failedCount = 0
 tax = 0.0
 orders = []
-fileName = "orders.txt"
+fileName = "inventory.json"
 
 def read_file(orders):
-
     if Path(fileName).exists() == False:
+        print(f"File {fileName} does not exist. Creating a new file...")
         with open(fileName,'+w') as file:
-            file.write("1001,Wireless Mouse,2\n")
-            file.write("1002,Keyboard,1\n")
-            file.write("1003,USB Cable,3")
+            items = [{
+                "ID":1001,
+                "Name":"Laptop",
+                "Price":1200.0,
+                "Stock":40
+            },
+            {
+                "ID":1002,
+                "Name":"Mouse",
+                "Price":25.50,
+                "Stock":40
+            },
+            {
+                "ID":1003,
+                "Name":"Keyboard",
+                "Price":45.0,
+                "Stock":25
+            }
+            ]
+
+            json.dump(items, file)
+        print(f"{fileName} created successfully.")
         file.close()
 
     with open(fileName,'+r') as file:
-        for line in file:
-            orders.append(line.strip())
-        file.close()
+        print(f"{fileName} found")
+        orders = json.load(file)
+        print(f"Inventory loaded successfully.")
+    file.close()
     return orders
+
+def add_product(orders):
+    print("Add Product")
+    productID = input("Enter the product ID: ")
+    productName = input("Enter the product name: ")
+    productPrice = float(input("Enter the product price: "))
+    productStock = int(input("Enter the product stock: "))
+
+    product = {
+        "ID": productID,
+        "Name": productName,
+        "Price": productPrice,
+        "Stock": productStock
+    }
+    orders.append(product)
+    print(f"Updated Inventory:\n{orders}")
+    print("\nProduct added successfully.\n")
+
+    with open(fileName,'w') as file:
+        json.dump(orders, file)
+    file.close()
+    return orders
+
 
 def save_output(output):
     with open(fileName,'+a') as file:
         file.write(str(output))
     file.close()
 
-def read_input(orders):
+def display_orders(orders):
+    print(orders)
+    print("Current Inventory:")
+    print("------------------------------------------------")
     for i in orders:
-        item = i.split(",")
-        print(f"{item[0]}, {item[1]}, {item[2]}")
+        print(f"ID:{i['ID']}| Name:{i['Name']}| Price:${i['Price']:.2f}| Stock:{i['Stock']}")
+    print("------------------------------------------------\n")
 
-def get_valid_product_name():
-    
-    productName = input("Enter the product name: ")
-    if productName.lower() == 'quit':
-        return None
-    return productName
 
-def get_valid_input_quantity():
-    userInput = input("Enter quantity: ")
-    if userInput.lower() == 'quit':
-        return None
-    if userInput[0] == '-':
-        print("Invalid input. Please enter a positive int.")
-        return False
-    elif userInput.isdigit() == False:
-        print("Invalid input. Please enter a valid int.")
-        return False
-    return int(userInput)
 
-def process_inventory(current_value, new_value):
-    inventory = current_value + new_value
-    return inventory
-def calculate_tax(amount):
-    return 0.10 * amount
-def generate_report(total_units, failed_units):
-    print(f"Total number of processes: {total_units} ,\nTotal number of failed processes: {failed_units},\nTotal inventory count: {inventory},\nTotal tax collected: {tax}")
+def initialize(orders):
+    print("========================================")
+    print("INVENTORY MANAGEMENT SYSTEM")
+    print("========================================\n")
+    orders = read_file(orders)
+    display_orders(orders)
+    print("----------- MENU -----------")
+    print("1. Display All Products\n"+
+            "2. Add Product\n"+
+            "3. Update Stock\n"+
+            "4. Search Product\n"+
+            "5. Save Inventory\n"+
+            "6. Exit")
+    print("----------------------------\n")
+    return orders
 
 
 while True:
     orders = []
-    print("Current orders:\n\n")
-    read_file(orders)
-    read_input(orders)
-    newItem = ""
+    if init == False:
+        orders = initialize(orders)
+        init = True
+    menuOption = input("Enter option: ")
 
-    itemName = get_valid_product_name()
-    itemQuantity = get_valid_input_quantity()
 
-    if itemName == None or itemQuantity == None:
-        print("Exiting the program.")
-        break
-
-    newItem = f"{int(orders[-1].split(',')[0]) + 1},{itemName},{itemQuantity}"
-
-    print(f"New item added: {newItem}")
-    save_output("\n"+newItem)
-    print(f"Order sucessfully saved to {fileName}.\n\n")
-# while True:
-#     read_input()
+    if menuOption == '1':
+        print("Display All Products")
+        display_orders(orders)
+    elif menuOption == '2':
+        orders = add_product(orders)
+    elif menuOption == '3':
+        pass
+    elif menuOption == '4':
+        pass
+    elif menuOption == '5':
+        pass
+    elif menuOption == '6':
+        pass
     
-
-#generate_report(processCount, failedCount)
