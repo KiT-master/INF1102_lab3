@@ -4,7 +4,6 @@ from Product import Product
 from Inventory import Inventory
 
 class File:
-    __inventory = Inventory
     __fileName = ""
 
     def __init__(self, fileName):
@@ -44,6 +43,21 @@ class File:
         with open(fileName,'+r') as file:
             print(f"{fileName} found")
             inventory_raw = json.load(file)
-            for p in inventory_raw: inventory.add_products(p)
+            for p in inventory_raw: inventory.add_products(Inventory(p["ID"],p["Name"],p["Price"],p["Stock"]))
             print(f"Inventory loaded successfully.")
         file.close()
+
+        return Inventory
+
+    def save_inventory(self,inventory):
+        fileName = self.__fileName
+        json_inventory = []
+
+        json_inventory = [ {"ID":p.__id, "Name": p.__name, "Price": p.__price, "Stock": p.__stock} for p in inventory]
+
+        with open(fileName,'w') as file:
+            json.dump(json_inventory, file)
+        file.close()
+
+    
+
