@@ -65,7 +65,7 @@ def add_product(orders):
     print("Add Product")
     productID = input("Enter the product ID: ")
     productName = input("Enter the product name: ")
-    productPrice = float(input("Enter the product price: "))
+    productPrice = float(input("Enter the product price: $"))
     productStock = int(input("Enter the product stock: "))
 
     product = {
