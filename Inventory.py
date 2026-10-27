@@ -6,12 +6,19 @@ class Inventory:
     def add_products(self, product):
         self.__products.append(product)
 
-    def search_products(self, name):
+    def get_inventory(self):
+        return self.__products
+
+    def search_products(self, ID):
         products = self.__products
-        product = [i for i in products if i.__name == name][0]
+        product = [p for p in products if p.get_id() == ID]
+        product = [] if product == [] else product[0]
         return product
 
     def display_products(self):
         products = self.__products
         print("Displaying all products:")
-        for p in products:print(f"------------------------------------------------\nID: {p.__product_id}\nName: {p.__name}\nPrice: ${p.__price:.2f}\nStock: {p.__stock}\n------------------------------------------------\n")
+        for p in products:
+            print("------------------------------------------------")
+            p.display_information()
+            print("------------------------------------------------")
