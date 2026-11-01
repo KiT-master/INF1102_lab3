@@ -1,4 +1,6 @@
 from Product import Product
+from PhysicalProduct import PhysicalProduct
+from DigitalProduct import DigitalProduct
 from Inventory import Inventory
 from file import File
 
@@ -63,11 +65,26 @@ class Main:
 
     def add_products(slef,inventory):
         print("Add Product")
-        productID = input("Enter the product ID: ")
-        productName = input("Enter the product name: ")
-        productPrice = float(input("Enter the product price: $"))
-        productStock = int(input("Enter the product stock: "))
-        product = Product(productID,productName,productPrice,productStock)
+        while True:
+            try:
+                productType = int(input("Enter the product type [1:Physical,2:Digital]: "))
+                productID = input("Enter the product ID: ")
+                productName = input("Enter the product name: ")
+                productPrice = float(input("Enter the product price: $"))
+                productStock = int(input("Enter the product stock: "))
+
+                if productType == 1:
+                    productWeight = float(input("Enter the product weight: "))
+                    product = PhysicalProduct(productID,productName,productPrice,productStock,productWeight)
+                elif productType == 2:
+                    productSize = float(input("Enter the product download size: "))
+                    product = DigitalProduct(productID,productName,productPrice,productStock,productSize)
+                else:
+                    print("Please only use int 1 or 2! for product types!")
+                    continue
+                break
+            except:
+                print("Please input valid fields!")
         inventory.add_products(product)
 
     def update_stocks(self,inventory):

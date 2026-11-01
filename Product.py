@@ -1,4 +1,6 @@
-class Product:
+from abc import ABC, abstractmethod
+
+class Product(ABC):
     __product_id:str
     __name:str
     __price:float
@@ -31,3 +33,10 @@ class Product:
     def display_information(self):
         print(f"ID: {self.__product_id}\nName: {self.__name}\nPrice: ${self.__price:.2f}\nStock: {self.__stock}")
 
+    @abstractmethod
+    def get_fulfilment_info(self):
+        pass
+
+if __name__ == "__main__":
+    product = Product(1, "Windows", 12 , 3)
+    product.display_information()

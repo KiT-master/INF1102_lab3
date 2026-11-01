@@ -1,0 +1,27 @@
+from Product import Product
+
+class DigitalProduct(Product):
+    __download_size:float
+
+    def __init__(self, product_id, name, price, stock, download_size):
+        super().__init__(product_id, name, price, stock)
+        self.__download_size = download_size
+
+    def get_size(self):
+        return self.__download_size
+
+    def display_information(self):
+        super().display_information()
+        print(f"Dowload Size:{self.__download_size}")
+
+    def get_fulfilment_info(self):
+        productName = self.get_name()
+        msg = f"The product:{productName} is delivered digitally!"
+        return msg
+
+
+if __name__ == "__main__":
+    #Testing syntaxt
+    product = DigitalProduct(1, "Windows", 12 , 3, 4)
+    product.display_information()
+    print(product.get_fulfilment_info())

@@ -1,0 +1,84 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide empty members
+
+class Main {
+  - __inventory: Inventory
+  - __file: File
+  + __init__()
+  + display_menu()
+  + get_input(): int
+  + read_file()
+  + add_products(inventory: Inventory)
+  + update_stocks(inventory: Inventory)
+  + search_products(inventory: Inventory)
+  + save_products(inventory: Inventory, file: File)
+  + end(inventory: Inventory, file: File)
+}
+
+class File {
+  - __fileName: str
+  + __init__(fileName: str)
+  + load_invetory(): Inventory
+  + save_inventory(inventory)
+}
+
+class Inventory {
+  - __products: List[Product]
+  + add_products(product: Product)
+  + get_inventory(): List[Product]
+  + search_products(ID)
+  + display_products()
+}
+
+abstract class Product {
+  - __product_id: str
+  - __name: str
+  - __price: float
+  - __stock: int
+  + __init__(product_id, name, price, stock)
+  + get_id()
+  + get_name()
+  + get_price()
+  + get_stock()
+  + update_stock(quantity)
+  + display_information()
+  {abstract} + get_fulfilment_info()
+}
+
+class PhysicalProduct {
+  - __weight: float
+  - __SHIPPING_RATE_PER_KG: float
+  + __init__(product_id, name, price, stock, weight)
+  + get_weight(): float
+  + calculate_shipping_cost()
+  + display_information()
+  + get_fulfilment_info()
+}
+
+class DigitalProduct {
+  - __download_size: float
+  + __init__(product_id, name, price, stock, download_size)
+  + get_size(): float
+  + display_information()
+  + get_fulfilment_info()
+}
+
+interface CanBeShipped {
+  {abstract} + calculate_shipping_cost()
+}
+
+Main "1" --> "1" Inventory : uses
+Main "1" --> "1" File : uses
+Main ..> PhysicalProduct : creates
+Main ..> DigitalProduct : creates
+File ..> Inventory : loads / saves
+File ..> PhysicalProduct : loads
+File ..> DigitalProduct : loads
+File ..> Product : serializes
+Inventory "1" o-- "0..*" Product : contains
+PhysicalProduct --|> Product
+DigitalProduct --|> Product
+PhysicalProduct ..|> CanBeShipped
+
+@enduml
