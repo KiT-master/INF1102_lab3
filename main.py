@@ -102,7 +102,7 @@ class Main:
     def search_products(self,inventory):
         itemID = input("Enter Product ID: ")
         product = inventory.search_products(itemID)
-        if product != []:
+        if product != None:
             print("------------------------------------------------")
             product.display_information()
             print("------------------------------------------------")
