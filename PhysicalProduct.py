@@ -1,13 +1,14 @@
 from Product import Product
 from CanBeShipped import CanBeShipped
+from supplier import Supplier
 
 
 class PhysicalProduct(Product, CanBeShipped):
     __weight:float
     __SHIPPING_RATE_PER_KG = 3.0
 
-    def __init__(self, product_id, name, price, stock, weight):
-        super().__init__(product_id, name, price, stock)
+    def __init__(self, product_id, name, price, stock, weight,supplier:Supplier):
+        super().__init__(product_id, name, price, stock,supplier)
         self.__weight = weight
 
     def get_weight(self):
@@ -27,10 +28,12 @@ class PhysicalProduct(Product, CanBeShipped):
 
 if __name__ == "__main__":
     # Test shipping costs for products with different weights.
-    lightProduct = PhysicalProduct(1, "kitkat", 12, 3, 1)
-    heavyProduct = PhysicalProduct(2, "Heavy item", 30, 2, 4)
+    supplier = Supplier("S001","KitKAt","9g@gmail.com")
+    lightProduct = PhysicalProduct(1, "kitkat", 12, 3, 1,supplier)
+    heavyProduct = PhysicalProduct(2, "Heavy item", 30, 2, 4,supplier)
     productList = [lightProduct,heavyProduct]
     for i in productList:
-        print(f"The Product:{i.get_name}")
+        print(f"The Product:{i.get_name()}")
         print(i.get_fulfilment_info())
         print(f"Shipping Cost:${i.calculate_shipping_cost()}")
+        print(f"Supplier id:{i.supplier.supplier_id},The supplier:{i.supplier.name},Contact:{i.supplier.contact_email}")

@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from supplier import Supplier
 
 class Product(ABC):
     __product_id:str
@@ -7,7 +8,9 @@ class Product(ABC):
     __stock:int
 
 
-    def __init__(self,product_id,name,price,stock):
+    def __init__(self,product_id:str,name:str,
+                 price:float,stock:int,supplier:Supplier):
+        self.supplier = supplier
         self.__product_id = product_id
         self.__name = name
         self.__price = price
@@ -25,6 +28,7 @@ class Product(ABC):
     
     def get_stock(self):
         return self.__stock
+
     
 
     def update_stock(self,quantity):
@@ -37,6 +41,8 @@ class Product(ABC):
     def get_fulfilment_info(self):
         pass
 
-if __name__ == "__main__":
-    product = Product(1, "Windows", 12 , 3)
-    product.display_information()
+#This can't be inistiated directly after abstract method is used
+# if __name__ == "__main__":
+
+#     product = Product(1, "Windows", 12 , 3,supplier)
+#     product.display_information()
