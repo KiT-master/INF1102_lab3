@@ -3,7 +3,7 @@ from Product import Product
 class Inventory: 
     __products:list[Product] = []
 
-    def add_products(self, product):
+    def add_products(self, product:Product):
         self.__products.append(product)
 
     def remove_products(self,ID):
@@ -20,10 +20,11 @@ class Inventory:
         product = None if product == [] else product[0]
         return product
 
-    def display_products(self):
+    def display_products(self) -> None:
         products = self.__products
         print("Displaying all products:")
         for p in products:
             print("------------------------------------------------")
             p.display_information()
             print("------------------------------------------------")
+

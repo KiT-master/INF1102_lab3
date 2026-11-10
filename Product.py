@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from supplier import Supplier
+from Supplier import Supplier
 
 class Product(ABC):
     __product_id:str

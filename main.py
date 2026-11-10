@@ -8,28 +8,27 @@ from file import File
 fileName = "inventory.json"
 
 class Main:
-    __inventory = Inventory()
-    __file = File(fileName)
-
     def __init__(self):
-        file = self.__file
-        inventory = self.__inventory
+        self.__inventory = Inventory()
+        self.__file = File(fileName)
         self.read_file()
         self.display_menu()
         while True:
             option = self.get_input()
             if option == 1:
-                inventory.display_products()
+                self.__inventory.display_products()
             elif option == 2:
-                self.add_products(inventory)
+                self.add_products()
             elif option == 3:
-                self.update_stocks(inventory)
+                self.update_stocks()
             elif option == 4:
-                self.search_products(inventory)
+                self.search_products()
             elif option == 5:
-                self.save_products(inventory,file)
+                self.remove_product()
             elif option == 6:
-                self.end(inventory,file)
+                self.save_products()
+            elif option == 7:
+                self.end()
                 break
 
 
@@ -42,8 +41,9 @@ class Main:
                 "2. Add Product\n"+
                 "3. Update Stock\n"+
                 "4. Search Product\n"+
-                "5. Save Inventory\n"+
-                "6. Exit")
+                "5. remove product\n"+
+                "6. Save Inventory\n"+
+                "7. Exit")
         print("----------------------------\n")
 
     def get_input(self):
@@ -60,10 +60,9 @@ class Main:
         return option
 
     def read_file(self):
-        file = self.__file
-        self.__inventory = file.load_invetory()
+        self.__inventory = self.__file.load_invetory()
 
-    def add_products(slef,inventory):
+    def add_products(self):
         print("Add Product")
         while True:
             try:
@@ -85,12 +84,12 @@ class Main:
                 break
             except:
                 print("Please input valid fields!")
-        inventory.add_products(product)
+        self.__inventory.add_products(product)
 
-    def update_stocks(self,inventory):
+    def update_stocks(self):
         itemID = input("Enter Product ID: ")
-        product = inventory.search_products(itemID)
-        if product != []:
+        product = self.__inventory.search_products(itemID)
+        if product is not None:
             print(f"Product Found:")
             print(f"Name: {product.get_name()}\nCurrent Stock: {product.get_stock()}")
             newStock = int(input("Enter new stock quantity: "))
@@ -99,9 +98,9 @@ class Main:
             return
         print("Product not in inventory,,")
 
-    def search_products(self,inventory):
+    def search_products(self):
         itemID = input("Enter Product ID: ")
-        product = inventory.search_products(itemID)
+        product = self.__inventory.search_products(itemID)
         if product != None:
             print("------------------------------------------------")
             product.display_information()
@@ -109,15 +108,28 @@ class Main:
             return
         print("Product not in inventory,,")
 
-    def save_products(self,inventory,file):
+    def remove_product(self):
+        inventory = self.__inventory
+        itemID = input("Enter Product ID to remove: ")
+        product = inventory.search_products(itemID)
+        if product != None:
+            self.__inventory.remove_products(itemID)
+            print("------------------------------------------------")
+            product.display_information()
+            print("------------------------------------------------")
+            print("Product removed!")
+            return
+        print("Product not found!")
+
+    def save_products(self):
         print("Saving inventory...")
         print("Saving inventory...")
-        file.save_inventory(inventory.get_inventory())
+        self.__file.save_inventory(self.__inventory.get_inventory())
         print(f"Inventory saved successfully to {fileName}.\n")
 
-    def end(self,inventory,file):
+    def end(self):
         print("Saving inventory before exit...")
-        file.save_inventory(inventory.get_inventory())
+        self.__file.save_inventory(self.__inventory.get_inventory())
         print("Inventory saved successfully.\n")
         print("Thank you for using Inventory Management System.")
         print("Program terminated.")
