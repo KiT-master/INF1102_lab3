@@ -3,6 +3,7 @@ from PhysicalProduct import PhysicalProduct
 from DigitalProduct import DigitalProduct
 from Inventory import Inventory
 from file import File
+from Supplier import Supplier
 
 
 fileName = "inventory.json"
@@ -71,13 +72,23 @@ class Main:
                 productName = input("Enter the product name: ")
                 productPrice = float(input("Enter the product price: $"))
                 productStock = int(input("Enter the product stock: "))
+                supplier_id = input("Enter the supplier ID: ")
+                supplier_name = input("Enter the supplier name: ")
+                supplier_email = input("Enter the supplier contact email: ")
+                supplier = Supplier(supplier_id, supplier_name, supplier_email)
 
                 if productType == 1:
                     productWeight = float(input("Enter the product weight: "))
-                    product = PhysicalProduct(productID,productName,productPrice,productStock,productWeight)
+                    product = PhysicalProduct(
+                        productID, productName, productPrice, productStock,
+                        productWeight, supplier,
+                    )
                 elif productType == 2:
                     productSize = float(input("Enter the product download size: "))
-                    product = DigitalProduct(productID,productName,productPrice,productStock,productSize)
+                    product = DigitalProduct(
+                        productID, productName, productPrice, productStock,
+                        productSize, supplier,
+                    )
                 else:
                     print("Please only use int 1 or 2! for product types!")
                     continue
